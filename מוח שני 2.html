@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/aharo/Downloads/index_3.html -->
+<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Israel OS">
+<meta name="theme-color" content="#0a0a0f">
+<title>Israel OS</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --bg4: #22222f;
+    --border: #2a2a3a;
+    --border2: #3a3a50;
+    --text: #f0f0f5;
+    --text2: #9090a8;
+    --text3: #5a5a72;
+    --accent: #4f8ef7;
+    --accent2: #3a6fd4;
+    --green: #2ecc71;
+    --green2: #27ae60;
+    --amber: #f39c12;
+    --red: #e74c3c;
+    --purple: #9b59b6;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    direction: rtl;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* LAYOUT */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+  }
+
+  .nav { padding: 12px 0; flex: 1; }
+
+  .nav-section {
+    font-size: 10px;
+    color: var(--text3);
+    padding: 12px 20px 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 14px;
+    transition: all 0.15s;
+    border-right: 3px solid transparent;
+  }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active {
+    background: var(--bg3);
+    color: var(--accent);
+    border-right-color: var(--accent);
+  }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+  .emergency-btn {
+    margin: 12px 16px;
+    padding: 10px;
+    background: rgba(231,76,60,0.1);
+    border: 1px solid rgba(231,76,60,0.3);
+    border-radius: 8px;
+    color: var(--red);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .emergency-btn:hover { background: rgba(231,76,60,0.2); }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  .topbar {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+  .page-title { font-size: 18px; font-weight: 600; color: var(--text); }
+  .page-date { font-size: 13px; color: var(--text3); }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* GRID */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 900px) {
+    .grid4 { grid-template-columns: repeat(2, 1fr); }
+    .grid3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .sidebar { display: none; }
+    .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+    .mobile-nav { display: flex !important; }
+  }
+
+  /* METRICS */
+  .metric {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .metric-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+  .metric-value { font-size: 26px; font-weight: 700; color: var(--text); }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .metric-green .metric-value { color: var(--green); }
+  .metric-amber .metric-value { color: var(--amber); }
+  .metric-accent .metric-value { color: var(--accent); }
+
+  /* INPUTS */
+  input, textarea, select {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 10px 14px;
+    width: 100%;
+    direction: rtl;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  input::placeholder, textarea::placeholder { color: var(--text3); }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: var(--bg3); }
+
+  .form-row { margin-bottom: 12px; }
+  .form-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; display: block; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font);
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--bg4); color: var(--text); }
+  .btn-green { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .btn-red { background: rgba(231,76,60,0.15); color: var(--red); border: 1px solid rgba(231,76,60,0.3); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-full { width: 100%; justify-content: center; }
+
+  /* TAGS */
+  .tag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid;
+    display: inline-block;
+  }
+  .tag-green { background: rgba(46,204,113,0.1); color: var(--green); border-color: rgba(46,204,113,0.3); }
+  .tag-amber { background: rgba(243,156,18,0.1); color: var(--amber); border-color: rgba(243,156,18,0.3); }
+  .tag-red { background: rgba(231,76,60,0.1); color: var(--red); border-color: rgba(231,76,60,0.3); }
+  .tag-accent { background: rgba(79,142,247,0.1); color: var(--accent); border-color: rgba(79,142,247,0.3); }
+  .tag-purple { background: rgba(155,89,182,0.1); color: var(--purple); border-color: rgba(155,89,182,0.3); }
+  .tag-grey { background: var(--bg3); color: var(--text3); border-color: var(--border); }
+
+  /* LIST ROWS */
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .list-row:last-child { border-bottom: none; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { background: var(--bg3); border-radius: 99px; height: 6px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 6px; border-radius: 99px; background: var(--accent); transition: width 0.3s; }
+
+  /* AVATAR */
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg4); color: var(--accent);
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* STATUS DOT */
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* CLAUDE CHAT */
+  .claude-panel {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 380px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    z-index: 100;
+  }
+  .claude-panel.open { transform: translateX(0); }
+  .claude-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .claude-title { font-size: 15px; font-weight: 600; }
+  .claude-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .msg-user {
+    background: var(--accent);
+    color: white;
+    align-self: flex-start;
+    border-radius: 12px 12px 12px 2px;
+  }
+  .msg-claude {
+    background: var(--bg3);
+    color: var(--text);
+    align-self: flex-end;
+    border-radius: 12px 12px 2px 12px;
+    border: 1px solid var(--border);
+  }
+  .msg-loading { opacity: 0.6; }
+  .claude-input-wrap {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+  .claude-input {
+    flex: 1;
+    min-height: 44px;
+    max-height: 120px;
+    padding: 10px 14px;
+    resize: none;
+  }
+
+  /* MOBILE NAV */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 8px 0 env(safe-area-inset-bottom);
+    z-index: 50;
+    justify-content: space-around;
+  }
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--text3);
+    font-size: 10px;
+    transition: color 0.15s;
+    border: none;
+    background: none;
+    font-family: var(--font);
+  }
+  .mobile-nav-item.active { color: var(--accent); }
+  .mobile-nav-item .icon { font-size: 20px; }
+
+  /* STORY CARDS (קיר ישראל) */
+  .story-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-right: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .story-card:hover { border-color: var(--accent); background: var(--bg4); }
+  .story-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .story-body { font-size: 13px; color: var(--text2); line-height: 1.6; display: none; margin-top: 8px; }
+  .story-card.open .story-body { display: block; }
+
+  /* IDEA CARD */
+  .idea-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .idea-card:hover { border-color: var(--border2); }
+  .idea-card.open { border-color: var(--accent); }
+  .idea-detail { display: none; margin-top: 12px; }
+  .idea-card.open .idea-detail { display: block; }
+
+  /* SCORE BAR */
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .score-label { font-size: 12px; color: var(--text2); min-width: 90px; }
+  .score-bar-bg { flex: 1; height: 4px; background: var(--bg4); border-radius: 99px; overflow: hidden; }
+  .score-bar-fill { height: 4px; border-radius: 99px; }
+  .score-val { font-size: 12px; font-weight: 600; min-width: 20px; text-align: center; }
+
+  /* KANBAN */
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 800px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
+  .kanban-col { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; min-height: 200px; }
+  .kanban-col-title { font-size: 12px; font-weight: 600; color: var(--text3); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .kanban-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .kanban-item:hover { border-color: var(--border2); }
+  .kanban-item-title { font-weight: 500; margin-bottom: 4px; }
+  .kanban-item-sub { font-size: 11px; color: var(--text3); }
+
+  /* OVERLAY */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 90;
+    display: none;
+  }
+  .overlay.open { display: block; }
+
+  /* MODAL */
+  .modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    width: 90%;
+    max-width: 480px;
+    z-index: 110;
+    display: none;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal.open { display: block; }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+
+  /* MORNING CARD */
+  .morning-card {
+    background: linear-gradient(135deg, #1a1a30 0%, #0f1525 100%);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .morning-greeting { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .morning-date { font-size: 14px; color: var(--text3); margin-bottom: 20px; }
+  .morning-question { font-size: 15px; color: var(--text2); margin-bottom: 12px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 99px; }
+
+  /* FADE IN */
+  .panel.active { animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .gap-8 { gap: 8px; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .flex-1 { flex: 1; }
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 11px; }
+  .text-muted { color: var(--text2); }
+  .text-dim { color: var(--text3); }
+  .font-semibold { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-title">Israel OS</div>
+      <div class="logo-sub">המוח השני שלך</div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section">יומיום</div>
+      <div class="nav-item active" onclick="showPanel(&#39;morning&#39;, this)">
+        <span class="icon">☀️</span> לוח בוקר
+      </div>
+      <div class="nav-item" onclick="showPanel(&#39;work&#39;, this)">
+        <span class="icon">💼</span> עבודה
+      </div>
+
+      <div class="nav-section">בנייה</div>
+      <div class="nav-item" onclick="showPanel(&#39;people&#39;, this)">
+        <span class="icon">🤝</span> אנשים
+      </div>
+      <div class="nav-item" onclick="showPanel(&#39;deals&#39;, this)">
+        <span class="icon">🏗️</span> הזדמנויות
+      </div>
+      <div class="nav-item" onclick="showPanel(&#39;ideas&#39;, this)">
+        <span class="icon">💡</span> רעיונות
+      </div>
+
+      <div class="nav-section">מסע</div>
+      <div class="nav-item" onclick="showPanel(&#39;journal&#39;, this)">
+        <span class="icon">📓</span> יומן
+      </div>
+      <div class="nav-item" onclick="showPanel(&#39;wins&#39;, this)">
+        <span class="icon">🏆</span> ניצחונות
+      </div>
+      <div class="nav-item" onclick="showPanel(&#39;timeline&#39;, this)">
+        <span class="icon">📅</span> ציר זמן
+      </div>
+
+      <div class="nav-section">כלים</div>
+      <div class="nav-item" onclick="showPanel(&#39;dashboard&#39;, this)">
+        <span class="icon">📊</span> לוח מספרים
+      </div>
+      <div class="nav-item" onclick="toggleClaude()">
+        <span class="icon">🤖</span> שוחח עם Claude
+      </div>
+    </nav>
+
+    <div class="emergency-btn" onclick="showPanel(&#39;emergency&#39;, null)">
+      🚨 דף חירום
+    </div>
+    <div style="margin:0 16px 16px;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;text-align:right" onclick="showApiSetup()">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px">חיבור Claude API</div>
+      <div style="font-size:12px;color:var(--accent)" id="api-status">⚙️ הכנס מפתח</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">לוח בוקר</div>
+      <div class="page-date" id="page-date">יום שלישי, 16 ביוני 2026</div>
+    </div>
+
+    <div class="content" id="content">
+
+      <!-- ☀️ MORNING PANEL -->
+      <div class="panel active" id="panel-morning">
+        <div class="morning-card">
+          <div class="morning-greeting" id="greeting">צהריים טובים, ישראל</div>
+          <div class="morning-date" id="today-date">יום שלישי, 16 ביוני 2026</div>
+          <div class="morning-question">מה הדבר האחד שיקרב אותך לנדל"ן היום?</div>
+          <div class="form-row">
+            <input type="text" id="morning-re" placeholder="כתוב כאן...">
+          </div>
+          <div class="morning-question">מה הדבר האחד שיקדם אותך בעבודה היום?</div>
+          <div class="form-row">
+            <input type="text" id="morning-work" placeholder="כתוב כאן...">
+          </div>
+          <button class="btn btn-primary" onclick="saveMorning()">שמור והתחל יום</button>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="card-header">פתוח לטיפול</div>
+            <div id="open-tasks">
+              <div class="list-row">
+                <div class="status-dot" style="background:var(--amber)"></div>
+                <div class="flex-1">לחזור לסמנכ"ל הר כביר</div>
+                <span class="tag tag-amber">דחוף</span>
+              </div>
+              <div class="list-row">
+                <div class="status-dot" style="background:var(--accent)"></div>
+                <div class="flex-1">להוסיף 2 קבלנים לעסק הצד</div>
+                <span class="tag tag-accent">שוטף</span>
+              </div>
+              <div class="list-row">
+                <div class="status-dot" style="background:var(--text3)"></div>
+                <div class="flex-1">לסגור עסקת סורסינג ראשונה</div>
+                <span class="tag tag-grey">יעד</span>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm mt-12" onclick="openModal(&#39;add-task-modal&#39;)">+ הוסף משימה</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">מצב שבועי</div>
+            <div class="grid2" style="gap:10px">
+              <div class="metric metric-green">
+                <div class="metric-label">קבלנים</div>
+                <div class="metric-value" id="w-contractors">0</div>
+                <div class="metric-sub">× ₪470/חודש</div>
+              </div>
+              <div class="metric metric-accent">
+                <div class="metric-label">מכירות השבוע</div>
+                <div class="metric-value" id="w-sales">0</div>
+                <div class="metric-sub">עסקאות</div>
+              </div>
+            </div>
+            <div class="mt-12">
+              <div class="flex justify-between mb-8">
+                <span class="text-sm text-muted">חסכון — יעד ₪80K</span>
+                <span class="text-sm text-dim" id="save-pct">0%</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-fill" id="save-bar" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">שאל את Claude</div>
+          <div class="flex gap-8">
+            <input type="text" id="quick-q" placeholder="שאל שאלה, שתף תובנה, בקש ניתוח..." onkeydown="if(event.key===&#39;Enter&#39;) quickAsk()">
+            <button class="btn btn-primary" onclick="quickAsk()">שלח</button>
+          </div>
+          <div id="quick-answer" style="display:none;margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;font-size:14px;line-height:1.6;color:var(--text2)"></div>
+        </div>
+      </div>
+
+      <!-- 💼 WORK PANEL -->
+      <div class="panel" id="panel-work">
+        <div class="grid4 mb-12">
+          <div class="metric metric-accent">
+            <div class="metric-label">לקוחות בצינור</div>
+            <div class="metric-value" id="pipe-count">0</div>
+            <div class="metric-sub">לחץ לעדכון</div>
+          </div>
+          <div class="metric metric-green">
+            <div class="metric-label">נסגרו החודש</div>
+            <div class="metric-value" id="closed-count">0</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">פגישות השבוע</div>
+            <div class="metric-value" id="meetings-count">0</div>
+          </div>
+          <div class="metric metric-amber">
+            <div class="metric-label">אחוז המרה</div>
+            <div class="metric-value" id="conv-rate">—</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <div class="card">
+              <div class="card-header">לקוחות פעילים</div>
+              <div id="clients-list">
+                <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">אין לקוחות עדיין. הוסף למטה.</div>
+              </div>
+              <button class="btn btn-secondary btn-sm btn-full mt-12" onclick="openModal(&#39;add-client-modal&#39;)">+ הוסף לקוח</button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">התנגדויות — תשובות מוכנות</div>
+              <div class="list-row"><div class="status-dot" style="background:var(--red)"></div><div class="flex-col flex-1"><div class="text-sm font-semibold">יקר מדי</div><div class="text-xs text-dim mt-8">מה המחיר של לא לעשות כלום?</div></div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-col flex-1"><div class="text-sm font-semibold">צריך לחשוב</div><div class="text-xs text-dim mt-8">מה בדיוק עוצר אותך מלהחליט עכשיו?</div></div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--text3)"></div><div class="flex-col flex-1"><div class="text-sm font-semibold">כבר יש לי ספק</div><div class="text-xs text-dim mt-8">מה הספק שלך לא נותן לך?</div></div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--text3)"></div><div class="flex-col flex-1"><div class="text-sm font-semibold">לא הזמן הנכון</div><div class="text-xs text-dim mt-8">מתי הזמן הנכון? מה ישתנה?</div></div></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header">לקח יומי</div>
+              <textarea id="lesson-input" placeholder="מה עבד היום? מה לא עבד? מה לא אחזור עליו?"></textarea>
+              <button class="btn btn-primary btn-full mt-8" onclick="saveLesson()">שמור לקח</button>
+              <div id="lessons-list" style="margin-top:12px"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">עדכון מספרים</div>
+              <div class="form-row">
+                <label class="form-label">לקוחות בצינור</label>
+                <input type="number" id="upd-pipe" placeholder="מספר">
+              </div>
+              <div class="form-row">
+                <label class="form-label">עסקאות שנסגרו החודש</label>
+                <input type="number" id="upd-closed" placeholder="מספר">
+              </div>
+              <div class="form-row">
+                <label class="form-label">פגישות השבוע</label>
+                <input type="number" id="upd-meetings" placeholder="מספר">
+              </div>
+              <button class="btn btn-secondary btn-full" onclick="updateWorkMetrics()">עדכן</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🤝 PEOPLE PANEL -->
+      <div class="panel" id="panel-people">
+        <div class="flex justify-between items-center mb-12">
+          <div class="flex gap-8" id="cat-filters">
+            <button class="btn btn-secondary btn-sm active-filter" onclick="filterPeople(&#39;all&#39;,this)">הכל</button>
+            <button class="btn btn-secondary btn-sm" onclick="filterPeople(&#39;יזם&#39;,this)">יזמים</button>
+            <button class="btn btn-secondary btn-sm" onclick="filterPeople(&#39;קבלן&#39;,this)">קבלנים</button>
+            <button class="btn btn-secondary btn-sm" onclick="filterPeople(&#39;משקיע&#39;,this)">משקיעים</button>
+            <button class="btn btn-secondary btn-sm" onclick="filterPeople(&#39;VIP&#39;,this)">VIP</button>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;add-person-modal&#39;)">+ הוסף</button>
+        </div>
+
+        <div class="grid3" id="people-grid">
+    <div class="card" style="cursor:pointer" onclick="askClaude(&#39;נתח לי את הקשר עם אבי עזרא. מה הפוטנציאל? מה הצעד הבא?&#39;)">
+      <div class="flex items-center gap-8 mb-12">
+        <div class="avatar">אב</div>
+        <div>
+          <div class="text-sm font-semibold">אבי עזרא</div>
+          <div class="text-xs text-dim mt-8">יזם נדל"ן</div>
+        </div>
+        <span class="tag tag-red" style="margin-right:auto">VIP</span>
+      </div>
+      <div class="text-xs text-dim">איפה: יצרתי הזדמנות</div>
+      <div class="text-xs text-dim mt-8">הבא: <span style="color:var(--text2)">לחזור עם הצעת ערך</span></div>
+    </div>
+  
+    <div class="card" style="cursor:pointer" onclick="askClaude(&#39;נתח לי את הקשר עם איציק תשובה. מה הפוטנציאל? מה הצעד הבא?&#39;)">
+      <div class="flex items-center gap-8 mb-12">
+        <div class="avatar">אי</div>
+        <div>
+          <div class="text-sm font-semibold">איציק תשובה</div>
+          <div class="text-xs text-dim mt-8">יזם ואיש עסקים</div>
+        </div>
+        <span class="tag tag-red" style="margin-right:auto">VIP</span>
+      </div>
+      <div class="text-xs text-dim">איפה: יצרתי הזדמנות</div>
+      <div class="text-xs text-dim mt-8">הבא: <span style="color:var(--text2)">לשמור קשר</span></div>
+    </div>
+  
+    <div class="card" style="cursor:pointer" onclick="askClaude(&#39;נתח לי את הקשר עם סמנכ" ל="" הר="" כביר.="" מה="" הפוטנציאל?="" הצעד="" הבא?')"="">
+      <div class="flex items-center gap-8 mb-12">
+        <div class="avatar">סמ</div>
+        <div>
+          <div class="text-sm font-semibold">סמנכ"ל הר כביר</div>
+          <div class="text-xs text-dim mt-8">סמנכ"ל</div>
+        </div>
+        <span class="tag tag-accent" style="margin-right:auto">יזם</span>
+      </div>
+      <div class="text-xs text-dim">איפה: כנס יזמים</div>
+      <div class="text-xs text-dim mt-8">הבא: <span style="color:var(--text2)">לחזור עם הצעת פועלים</span></div>
+    </div>
+  </div>
+      </div>
+
+      <!-- 🏗️ DEALS PANEL -->
+      <div class="panel" id="panel-deals">
+        <div class="flex justify-between items-center mb-12">
+          <div class="text-sm text-muted">מעקב הזדמנויות — גרור בין עמודות</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;add-deal-modal&#39;)">+ הזדמנות חדשה</button>
+        </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-title">💡 רעיון</div>
+            <div id="col-idea">
+              <div class="kanban-item">
+                <div class="kanban-item-title">תוכנת AI לנדל"ן</div>
+                <div class="kanban-item-sub">טכנולוגיה</div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">🔍 בבדיקה</div>
+            <div id="col-check">
+              <div class="kanban-item">
+                <div class="kanban-item-title">אוטומציית WhatsApp לקבלנים</div>
+                <div class="kanban-item-sub">עסק צד</div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">⚡ בתהליך</div>
+            <div id="col-progress">
+              <div class="kanban-item" style="border-color:var(--accent)">
+                <div class="kanban-item-title">כוח אדם לקבלנים</div>
+                <div class="kanban-item-sub">פעיל — <span style="color:var(--green)">0 קבלנים</span></div>
+              </div>
+              <div class="kanban-item" style="border-color:var(--accent)">
+                <div class="kanban-item-title">סורסינג עסקה ראשונה</div>
+                <div class="kanban-item-sub">נדל"ן</div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">✅ נסגר</div>
+            <div id="col-done">
+              <div class="kanban-item" style="opacity:0.6">
+                <div class="kanban-item-title">פינוי בינוי — כמעט</div>
+                <div class="kanban-item-sub">לא נסגר — לחזור</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 💡 IDEAS PANEL -->
+      <div class="panel" id="panel-ideas">
+        <div class="flex justify-between items-center mb-12">
+          <div class="text-sm text-muted">כספת הרעיונות — כל רעיון נשמר, שום דבר לא אובד</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;add-idea-modal&#39;)">+ רעיון חדש</button>
+        </div>
+
+        <div class="card" style="background:rgba(79,142,247,0.05);border-color:rgba(79,142,247,0.2)">
+          <div style="font-size:13px;color:var(--text2);line-height:1.6"><strong style="color:var(--accent)">חוק ישראל:</strong> לפני שרצים — האם זה מקרב לנדל"ן? יש כסף ב-90 יום? האם זה מסיח מהעיקר?</div>
+        </div>
+
+        <div id="ideas-grid">
+    <div class="idea-card" onclick="this.classList.toggle(&#39;open&#39;)">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--amber)"></div>
+        <div class="flex-1 text-sm font-semibold">סוחרי רכב</div>
+        <span class="tag tag-amber">ממתין</span>
+        <span class="tag tag-grey">טכנולוגיה</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">לבנות בוט שמאתר עסקאות לסוחרי רכב על ידי התראה שעולה מודעה מתוך פייסבוק</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude(&#39;נתח לי את הרעיון: סוחרי רכב. האם הוא עובר את חוק ישראל? מה הצעד הבא?&#39;)">נתח עם Claude</button>
+      </div>
+    </div>
+  
+    <div class="idea-card" onclick="this.classList.toggle(&#39;open&#39;)">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <div class="flex-1 text-sm font-semibold">כוח אדם לקבלנים</div>
+        <span class="tag tag-green">פעיל</span>
+        <span class="tag tag-grey">עסק</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">470 ₪ לפועל לחודש. כבר פועל.</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude(&#39;נתח לי את הרעיון: כוח אדם לקבלנים. האם הוא עובר את חוק ישראל? מה הצעד הבא?&#39;)">נתח עם Claude</button>
+      </div>
+    </div>
+  
+    <div class="idea-card" onclick="this.classList.toggle(&#39;open&#39;)">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <div class="flex-1 text-sm font-semibold">סורסינג עסקאות נדל"ן</div>
+        <span class="tag tag-green">פעיל</span>
+        <span class="tag tag-grey">נדל"ן</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">מציאת עסקאות עבור יזמים. עלות אפס.</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude(&#39;נתח לי את הרעיון: סורסינג עסקאות נדל" ן.="" האם="" הוא="" עובר="" את="" חוק="" ישראל?="" מה="" הצעד="" הבא?')"="">נתח עם Claude</button>
+      </div>
+    </div>
+  
+    <div class="idea-card" onclick="this.classList.toggle(&#39;open&#39;)">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--amber)"></div>
+        <div class="flex-1 text-sm font-semibold">אוטומציית WhatsApp לקבלנים</div>
+        <span class="tag tag-amber">ממתין</span>
+        <span class="tag tag-grey">טכנולוגיה</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">גיוס פועלים אוטומטי.</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude(&#39;נתח לי את הרעיון: אוטומציית WhatsApp לקבלנים. האם הוא עובר את חוק ישראל? מה הצעד הבא?&#39;)">נתח עם Claude</button>
+      </div>
+    </div>
+  
+    <div class="idea-card" onclick="this.classList.toggle(&#39;open&#39;)">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--amber)"></div>
+        <div class="flex-1 text-sm font-semibold">תוכנת AI לנדל"ן</div>
+        <span class="tag tag-amber">ממתין</span>
+        <span class="tag tag-grey">טכנולוגיה</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">זיהוי הזדמנויות בינה מלאכותית.</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude(&#39;נתח לי את הרעיון: תוכנת AI לנדל" ן.="" האם="" הוא="" עובר="" את="" חוק="" ישראל?="" מה="" הצעד="" הבא?')"="">נתח עם Claude</button>
+      </div>
+    </div>
+  </div>
+      </div>
+
+      <!-- 📓 JOURNAL PANEL -->
+      <div class="panel" id="panel-journal">
+        <div class="grid2">
+          <div>
+            <div class="card">
+              <div class="card-header">רשומה חדשה — ספר ישראל</div>
+              <div class="form-row">
+                <input type="text" id="journal-title" placeholder="כותרת (פגישה עם X / תובנה / כישלון...)">
+              </div>
+              <div class="form-row">
+                <select id="journal-type">
+                  <option value="תובנה">תובנה</option>
+                  <option value="פגישה">פגישה</option>
+                  <option value="ניצחון">ניצחון</option>
+                  <option value="כישלון">כישלון</option>
+                  <option value="עסקה">עסקה</option>
+                  <option value="אחר">אחר</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <textarea id="journal-body" placeholder="מה קרה? מה הרגשת? מה למדת?"></textarea>
+              </div>
+              <button class="btn btn-primary btn-full" onclick="saveJournal()">שמור רשומה</button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header">רשומות אחרונות</div>
+              <div id="journal-list">
+                <div class="list-row">
+                  <div class="flex-col flex-1">
+                    <div class="text-sm font-semibold">כמעט סגרתי פינוי בינוי</div>
+                    <div class="text-xs text-dim mt-8">עסקה • 2024</div>
+                    <div class="text-xs text-muted mt-8">הגעתי קרוב מאוד. לא נסגר — אבל הייתי שם. זה proof of concept.</div>
+                  </div>
+                </div>
+                <div class="list-row">
+                  <div class="flex-col flex-1">
+                    <div class="text-sm font-semibold">ישיבה עם אבי עזרא</div>
+                    <div class="text-xs text-dim mt-8">פגישה • 2024</div>
+                    <div class="text-xs text-muted mt-8">למדתי שצריך להביא ערך קודם. לא לבוא עם ידיים ריקות.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🏆 WINS PANEL -->
+      <div class="panel" id="panel-wins">
+        <div class="flex justify-between items-center mb-12">
+          <div class="text-sm text-muted">אתה נוטה לזכור רק מה חסר. זה הדף שמזכיר לך מה יש.</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;add-win-modal&#39;)">+ ניצחון</button>
+        </div>
+
+        <div id="wins-grid">
+          <div class="grid3">
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">אומץ</div>
+              <div class="text-sm font-semibold">עליתי לקומה 40 ללא הזמנה</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">קשרים</div>
+              <div class="text-sm font-semibold">ישבתי עם אבי עזרא ואיציק תשובה</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">עסק</div>
+              <div class="text-sm font-semibold">עברתי רישיון תיווך ללא קורס</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">גוף</div>
+              <div class="text-sm font-semibold">רצתי 10 ק"מ בפעם הראשונה</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">אומץ</div>
+              <div class="text-sm font-semibold">ניגשתי לבחורה שחברים לא האמינו שאגש</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">עסק</div>
+              <div class="text-sm font-semibold">חיברתי קבלן לחברת כוח אדם — עמלה ראשונה</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">אומץ</div>
+              <div class="text-sm font-semibold">טסתי לבד לברזיל</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">קשרים</div>
+              <div class="text-sm font-semibold">עצרתי לדבר עם קבלן עפר בלילה מהוולט</div>
+            </div>
+            <div class="card" style="border-right:3px solid var(--green);border-radius:0 12px 12px 0">
+              <div class="text-xs text-dim mb-8">עסקאות</div>
+              <div class="text-sm font-semibold">הגעתי קרוב לפינוי בינוי — בגיל 23</div>
+            </div>
+          </div>
+          <div id="extra-wins" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- 📅 TIMELINE PANEL -->
+      <div class="panel" id="panel-timeline">
+        <div class="flex justify-between items-center mb-12">
+          <div class="text-sm text-muted">כל מה שעשית — שנה אחרי שנה</div>
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;add-event-modal&#39;)">+ אירוע</button>
+        </div>
+
+        <div style="padding-right:20px;border-right:2px solid var(--border)">
+          <div class="mb-12">
+            <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;margin-right:-28px"><span style="background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px">2022–2023</span></div>
+            <div class="card" style="margin-right:0">
+              <div class="list-row"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm">ישב עם אבי עזרא — ניסה לקדם רעיונות ועסקאות</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm">ישב עם איציק תשובה — נחשף לעולם עסקי מקרוב</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm">הסתובב בעיריית נתניה לקידום אתרי בנייה</div></div>
+              <div class="list-row" style="border:none"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm">עלה לקומה 40 ללא הזמנה להציג רעיון</div></div>
+            </div>
+          </div>
+
+          <div class="mb-12">
+            <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:12px;margin-right:-28px"><span style="background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px">2023–2024</span></div>
+            <div class="card">
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">פיטורים — תקופת אתגר ומינוס</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">עבד בוולט — חיפש תב"עות ובניינים ישנים בין משלוחים</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">עצר לדבר עם קבלן עפר בלילה — החליפו מספרים</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">כמעט סגר עסקת פינוי בינוי — היה קרוב מאוד</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">רץ 10 ק"מ בפעם הראשונה — תחת לחץ כלכלי</div></div>
+              <div class="list-row" style="border:none"><div class="status-dot" style="background:var(--amber)"></div><div class="flex-1 text-sm">עבר רישיון תיווך ללא קורס</div></div>
+            </div>
+          </div>
+
+          <div class="mb-12">
+            <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px;margin-right:-28px"><span style="background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px">2024–2025</span></div>
+            <div class="card">
+              <div class="list-row"><div class="status-dot" style="background:var(--green)"></div><div class="flex-1 text-sm">כנס יזמים — כתב "יזם" על תג השם לחברה שלא קיימת</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--green)"></div><div class="flex-1 text-sm">הכיר סמנכ"ל הר כביר — כמעט סגר עסקת פועלים</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--green)"></div><div class="flex-1 text-sm">חיבר קבלן לחברת כוח אדם — עמלה ראשונה</div></div>
+              <div class="list-row"><div class="status-dot" style="background:var(--green)"></div><div class="flex-1 text-sm">טס לבד לברזיל — יצר קשרים</div></div>
+              <div class="list-row" style="border:none"><div class="status-dot" style="background:var(--green)"></div><div class="flex-1 text-sm">התחיל עבודה חדשה — ₪8,000 + רכב + עמלות</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;margin-right:-28px"><span style="background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px">עכשיו →</span></div>
+            <div class="card" style="border-color:var(--accent)">
+              <div class="list-row"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm">בונה עסק צד — כוח אדם לקבלנים</div></div>
+              <div class="list-row" style="border:none;color:var(--accent)"><div class="status-dot" style="background:var(--accent)"></div><div class="flex-1 text-sm font-semibold">הפרק הבא נכתב עכשיו...</div></div>
+            </div>
+          </div>
+
+          <div id="extra-events" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- 📊 DASHBOARD PANEL -->
+      <div class="panel" id="panel-dashboard">
+        <div class="grid4 mb-16">
+          <div class="metric">
+            <div class="metric-label">עו"ש</div>
+            <div class="metric-value" id="d-bank" onclick="editMetric(&#39;d-bank&#39;,&#39;עו&quot;ש (₪)&#39;)">—</div>
+            <div class="metric-sub">לחץ לעדכון</div>
+          </div>
+          <div class="metric metric-green">
+            <div class="metric-label">חסכון</div>
+            <div class="metric-value" id="d-save" onclick="editMetric(&#39;d-save&#39;,&#39;חסכון (₪)&#39;)">—</div>
+            <div class="metric-sub">יעד: ₪80,000</div>
+          </div>
+          <div class="metric metric-amber">
+            <div class="metric-label">הכנסה חודשית</div>
+            <div class="metric-value" id="d-income" onclick="editMetric(&#39;d-income&#39;,&#39;הכנסה חודשית (₪)&#39;)">—</div>
+            <div class="metric-sub">שכירות + עסק</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">חובות</div>
+            <div class="metric-value" id="d-debt" onclick="editMetric(&#39;d-debt&#39;,&#39;חובות (₪)&#39;)">—</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <div class="card-header">עסק הצד — קבלנים</div>
+            <div class="flex items-center gap-8 mb-12">
+              <button onclick="adjContractors(-1)" style="background:var(--bg4);border:1px solid var(--border);border-radius:6px;width:32px;height:32px;color:var(--text);cursor:pointer;font-size:18px">−</button>
+              <span id="contractors-num" style="font-size:36px;font-weight:700;min-width:50px;text-align:center">0</span>
+              <button onclick="adjContractors(1)" style="background:var(--accent);border:none;border-radius:6px;width:32px;height:32px;color:white;cursor:pointer;font-size:18px">+</button>
+              <div>
+                <div class="text-xs text-dim">קבלנים פעילים</div>
+                <div class="text-sm" style="color:var(--green);font-weight:600" id="contractors-rev">₪0 / חודש</div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-8">
+                <span class="text-xs text-dim">יעד: 10 קבלנים</span>
+                <span class="text-xs text-dim" id="contractors-pct">0%</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-fill" id="contractors-bar" style="width:0%;background:var(--green)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">מצב רוח היום</div>
+            <div class="flex gap-8 mb-12">
+              <button class="btn btn-secondary flex-1 justify-center" onclick="setMood(&#39;low&#39;,this)" id="mood-low">נמוך</button>
+              <button class="btn btn-secondary flex-1 justify-center" onclick="setMood(&#39;mid&#39;,this)" id="mood-mid">סביר</button>
+              <button class="btn btn-secondary flex-1 justify-center" onclick="setMood(&#39;high&#39;,this)" id="mood-high">גבוה</button>
+            </div>
+            <div id="mood-msg" style="font-size:13px;color:var(--text2);line-height:1.6;min-height:40px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🚨 EMERGENCY PANEL -->
+      <div class="panel" id="panel-emergency">
+        <div class="card" style="background:rgba(231,76,60,0.05);border-color:rgba(231,76,60,0.3);margin-bottom:20px">
+          <div style="font-size:20px;font-weight:700;color:var(--red);margin-bottom:8px">כשאתה בשחורות</div>
+          <div style="font-size:14px;color:var(--text2);line-height:1.7">קרא את הדף הזה לפני שאתה מקבל כל החלטה. לפני שאתה מוותר על משהו. לפני שאתה מחליט שאתה "לא מתקדם".</div>
+        </div>
+
+        <div class="card mb-16">
+          <div class="card-header">העובדות — לא התחושות</div>
+          <div class="list-row"><div class="avatar" style="background:rgba(79,142,247,0.15)">23</div><div class="flex-col flex-1"><div class="text-sm font-semibold">אתה בן 23</div><div class="text-xs text-dim mt-8">רוב האנשים שאתה מסתכל עליהם בהשראה התחילו מאוחר יותר.</div></div></div>
+          <div class="list-row"><div class="avatar">📜</div><div class="flex-col flex-1"><div class="text-sm font-semibold">עברת רישיון תיווך ללא קורס</div><div class="text-xs text-dim mt-8">מבחן שאנשים לומדים אליו חודשים.</div></div></div>
+          <div class="list-row"><div class="avatar">🤝</div><div class="flex-col flex-1"><div class="text-sm font-semibold">ישבת עם אבי עזרא ואיציק תשובה</div><div class="text-xs text-dim mt-8">כמה בני 23 הגיעו לשם?</div></div></div>
+          <div class="list-row"><div class="avatar">🏢</div><div class="flex-col flex-1"><div class="text-sm font-semibold">עלית לקומה 40 ללא הזמנה</div><div class="text-xs text-dim mt-8">רוב האנשים לא היו עושים את זה.</div></div></div>
+          <div class="list-row"><div class="avatar">💪</div><div class="flex-col flex-1"><div class="text-sm font-semibold">עברת תקופת מינוס ולא נשברת</div><div class="text-xs text-dim mt-8">בזמן שהיית בשפל — חיפשת עסקאות. זה מי שאתה.</div></div></div>
+          <div class="list-row"><div class="avatar">🚀</div><div class="flex-col flex-1"><div class="text-sm font-semibold">התחלת עבודה עם רכב ועמלות</div></div></div>
+          <div class="list-row" style="border:none"><div class="avatar">✈️</div><div class="flex-col flex-1"><div class="text-sm font-semibold">טסת לבד לברזיל. רצת 10 ק"מ. ניגשת לבחורה.</div></div></div>
+        </div>
+
+        <div class="card" style="background:rgba(79,142,247,0.05);border-color:rgba(79,142,247,0.2);margin-bottom:16px">
+          <div style="font-size:16px;font-weight:600;color:var(--text);line-height:1.7;margin-bottom:8px">גם בתקופות שבהן הייתי עסוק בהישרדות, המוח שלי היה עסוק ביצירת הזדמנויות.</div>
+          <div style="font-size:14px;color:var(--accent)">אני לא מחכה להזמנה. אני נכנס לחדר.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">קיר ישראל — הסיפורים שמגדירים אותך</div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">קומה 40</div>
+            <div class="story-body">עליתי לקומה 40 ללא הזמנה מוקדמת כדי להציג רעיון בנדל"ן. רוב האנשים לא היו עושים את זה. אתה עשית. זה לא אומץ חד פעמי — זה מי שאתה.</div>
+          </div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">אבי עזרא + איציק תשובה</div>
+            <div class="story-body">ישבת עם שני השמות הגדולים האלה. לא כי הוזמנת — כי יצרת את ההזדמנות. בגיל 22-23. זה לא מזל. זה אתה.</div>
+          </div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">וולט + תב"עות</div>
+            <div class="story-body">בזמן מינוס ולחץ כלכלי — חיפשת תב"עות, בניינים ישנים, קרקעות. לא היה לך כסף לנסח טאבו. ועדיין חיפשת עסקאות. המוח שלך לא הפסיק לעבוד.</div>
+          </div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">קבלן העפר בלילה</div>
+            <div class="story-body">ראית קבלן עפר עובד בלילה. עצרת. ניגשת. דיברתם. החלפתם מספרים. גם בשפל המוחלט — חיפשת קשרים.</div>
+          </div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">כנס יזמים</div>
+            <div class="story-body">כתבת "יזם, בן פורת יזמות ובנייה" על תג השם — לחברה שעדיין לא הייתה קיימת. הכרת את סמנכ"ל הר כביר. כמעט סגרת עסקה. אתה לא מחכה למציאות — אתה יוצר אותה.</div>
+          </div>
+          <div class="story-card" onclick="this.classList.toggle(&#39;open&#39;)">
+            <div class="story-title">ריצת 10 ק"מ</div>
+            <div class="story-body">בתקופת המינוס והלחץ — רצת 10 ק"מ בפעם הראשונה. אתה לא מתמוטט תחת לחץ — אתה מתחרה בו.</div>
+          </div>
+        </div>
+
+        <button class="btn btn-red btn-full mt-12" onclick="askClaude(&#39;אני בנקודה קשה ובספק עצמי עמוק. תסתכל על כל הדרך שעברתי ותזכיר לי מי אני על פי המעשים שלי — לא על פי התחושות.&#39;)">
+          🔥 תזכיר לי מי אני — שוחח עם Claude
+        </button>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<!-- CLAUDE PANEL -->
+<div class="claude-panel" id="claude-panel">
+  <div class="claude-header">
+    <div class="claude-title">🤖 Claude — המוח השני שלך</div>
+    <button onclick="toggleClaude()" style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px">✕</button>
+  </div>
+  <div class="claude-messages" id="claude-messages">
+    <div class="msg msg-claude">שלום ישראל. אני כאן. שאל, שתף, בקש ניתוח — אני עונה.</div>
+  </div>
+  <div class="claude-input-wrap">
+    <textarea class="claude-input" id="claude-input" placeholder="כתוב כאן..." rows="1" onkeydown="if(event.key===&#39;Enter&#39;&amp;&amp;!event.shiftKey){event.preventDefault();sendMessage()}"></textarea>
+    <button class="btn btn-primary" onclick="sendMessage()">שלח</button>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobile-nav">
+  <button class="mobile-nav-item active" onclick="showPanel(&#39;morning&#39;,this)"><span class="icon">☀️</span>בוקר</button>
+  <button class="mobile-nav-item" onclick="showPanel(&#39;work&#39;,this)"><span class="icon">💼</span>עבודה</button>
+  <button class="mobile-nav-item" onclick="showPanel(&#39;people&#39;,this)"><span class="icon">🤝</span>אנשים</button>
+  <button class="mobile-nav-item" onclick="showPanel(&#39;deals&#39;,this)"><span class="icon">🏗️</span>עסקאות</button>
+  <button class="mobile-nav-item" onclick="showPanel(&#39;emergency&#39;,this)"><span class="icon">🚨</span>חירום</button>
+</nav>
+
+<!-- MODALS -->
+<div class="modal" id="add-task-modal">
+  <div class="modal-title">משימה חדשה</div>
+  <div class="form-row"><label class="form-label">משימה</label><input id="task-title" placeholder="מה צריך לעשות?"></div>
+  <div class="form-row">
+    <label class="form-label">עדיפות</label>
+    <select id="task-prio"><option value="דחוף">דחוף</option><option value="שוטף">שוטף</option><option value="יעד">יעד</option></select>
+  </div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addTask()">הוסף</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-task-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-person-modal">
+  <div class="modal-title">איש קשר חדש</div>
+  <div class="form-row"><label class="form-label">שם מלא</label><input id="p-name" placeholder="שם"></div>
+  <div class="form-row"><label class="form-label">תפקיד / חברה</label><input id="p-role" placeholder="תפקיד"></div>
+  <div class="form-row"><label class="form-label">קטגוריה</label>
+    <select id="p-cat">
+      <option value="יזם">יזם</option><option value="קבלן">קבלן</option><option value="משקיע">משקיע</option>
+      <option value="עירייה">עירייה</option><option value="עסקים">בעל עסקים</option><option value="VIP">VIP</option><option value="אחר">אחר</option>
+    </select>
+  </div>
+  <div class="form-row"><label class="form-label">איפה הכרנו</label><input id="p-where" placeholder="כנס / חיבור / שיחה..."></div>
+  <div class="form-row"><label class="form-label">מה הצעד הבא</label><input id="p-next" placeholder="להתקשר / לשלוח הצעה..."></div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addPerson()">הוסף</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-person-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-deal-modal">
+  <div class="modal-title">הזדמנות חדשה</div>
+  <div class="form-row"><label class="form-label">שם ההזדמנות</label><input id="deal-title" placeholder="שם"></div>
+  <div class="form-row"><label class="form-label">קטגוריה</label><input id="deal-cat" placeholder="נדל&quot;ן / עסק / אחר"></div>
+  <div class="form-row"><label class="form-label">שלב</label>
+    <select id="deal-stage">
+      <option value="col-idea">רעיון</option><option value="col-check">בבדיקה</option>
+      <option value="col-progress">בתהליך</option><option value="col-done">נסגר</option>
+    </select>
+  </div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addDeal()">הוסף</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-deal-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-idea-modal">
+  <div class="modal-title">רעיון חדש — כספת</div>
+  <div class="form-row"><label class="form-label">שם הרעיון</label><input id="idea-title" placeholder="שם"></div>
+  <div class="form-row"><label class="form-label">תיאור קצר</label><textarea id="idea-desc" placeholder="מה הרעיון?"></textarea></div>
+  <div class="form-row"><label class="form-label">קטגוריה</label>
+    <select id="idea-cat"><option>נדל"ן</option><option>עסק</option><option>טכנולוגיה</option><option>אחר</option></select>
+  </div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addIdea()">שמור לכספת</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-idea-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-win-modal">
+  <div class="modal-title">ניצחון חדש</div>
+  <div class="form-row"><label class="form-label">מה קרה?</label><input id="win-title" placeholder="גם ניצחון קטן חשוב"></div>
+  <div class="form-row"><label class="form-label">קטגוריה</label>
+    <select id="win-cat"><option>אומץ</option><option>קשרים</option><option>עסק</option><option>גוף</option><option>כסף</option><option>אחר</option></select>
+  </div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addWin()">שמור</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-win-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-client-modal">
+  <div class="modal-title">לקוח חדש</div>
+  <div class="form-row"><label class="form-label">שם / חברה</label><input id="cl-name" placeholder="שם הלקוח"></div>
+  <div class="form-row"><label class="form-label">סטטוס</label>
+    <select id="cl-status"><option>מתעניין</option><option>בתהליך</option><option>נסגר</option><option>לא רלוונטי</option></select>
+  </div>
+  <div class="form-row"><label class="form-label">הצעד הבא</label><input id="cl-next" placeholder="מה עושים?"></div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addClient()">הוסף</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-client-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<div class="modal" id="add-event-modal">
+  <div class="modal-title">אירוע חדש לציר הזמן</div>
+  <div class="form-row"><label class="form-label">תיאור האירוע</label><input id="event-text" placeholder="מה קרה?"></div>
+  <div class="flex gap-8 mt-12">
+    <button class="btn btn-primary flex-1" onclick="addTimelineEvent()">הוסף</button>
+    <button class="btn btn-secondary" onclick="closeModal(&#39;add-event-modal&#39;)">ביטול</button>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+const STATE = JSON.parse(localStorage.getItem('israel-os') || '{}');
+function save() { localStorage.setItem('israel-os', JSON.stringify(STATE)); }
+
+// ── INIT ──
+window.onload = () => {
+  if (ANTHROPIC_API_KEY) {
+    const statusEl = document.getElementById('api-status');
+    if (statusEl) statusEl.textContent = '✅ מחובר';
+  }
+  setDate();
+  renderPeople();
+  renderIdeas();
+  loadState();
+};
+
+function setDate() {
+  const now = new Date();
+  const days = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+  const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  const h = now.getHours();
+  const greet = h < 12 ? 'בוקר טוב' : h < 17 ? 'צהריים טובים' : 'ערב טוב';
+  document.getElementById('greeting').textContent = greet + ', ישראל';
+  const dateStr = `יום ${days[now.getDay()]}, ${now.getDate()} ב${months[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('today-date').textContent = dateStr;
+  document.getElementById('page-date').textContent = dateStr;
+}
+
+function loadState() {
+  if (STATE.contractors !== undefined) {
+    adjContractors(0);
+    document.getElementById('contractors-num').textContent = STATE.contractors || 0;
+    updateContractors();
+  }
+  if (STATE.lessons) {
+    STATE.lessons.forEach(l => appendLesson(l));
+  }
+  if (STATE.journalEntries) {
+    STATE.journalEntries.forEach(e => appendJournalEntry(e));
+  }
+  if (STATE.extraWins) {
+    STATE.extraWins.forEach(w => appendWin(w));
+  }
+}
+
+// ── NAVIGATION ──
+const panelTitles = {
+  morning: 'לוח בוקר', work: 'עבודה', people: 'אנשים', deals: 'הזדמנויות',
+  ideas: 'רעיונות', journal: 'ספר ישראל — יומן', wins: 'ניצחונות',
+  timeline: 'ציר זמן', dashboard: 'לוח מספרים', emergency: '🚨 דף חירום'
+};
+
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('page-title').textContent = panelTitles[id] || id;
+}
+
+// ── CLAUDE PANEL ──
+function toggleClaude() {
+  const p = document.getElementById('claude-panel');
+  const o = document.getElementById('overlay');
+  p.classList.toggle('open');
+  o.classList.toggle('open');
+  if (p.classList.contains('open')) checkApiKey();
+}
+
+function closeAll() {
+  document.getElementById('claude-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+}
+
+// ── CLAUDE API ──
+let ANTHROPIC_API_KEY = localStorage.getItem('israel-os-api-key') || '';
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  ANTHROPIC_API_KEY = key;
+  localStorage.setItem('israel-os-api-key', key);
+  document.getElementById('api-setup').style.display = 'none';
+  document.getElementById('claude-messages').innerHTML = '<div class="msg msg-claude">מחובר! שלום ישראל. אני כאן. שאל, שתף, בקש ניתוח — אני עונה.</div>';
+  const statusEl = document.getElementById('api-status');
+  if (statusEl) statusEl.textContent = '✅ מחובר';
+}
+
+function showApiSetup() {
+  document.getElementById('api-setup').style.display = 'flex';
+}
+
+function checkApiKey() {
+  if (!ANTHROPIC_API_KEY) {
+    document.getElementById('api-setup').style.display = 'flex';
+  }
+}
+
+const SYSTEM_PROMPT = `אתה המוח השני של ישראל אהרונוב, בן 23, יזם בהתפתחות.
+ישראל עובד כיום במכירות ופיתוח עסקי. החלום שלו הוא יזמות נדל"ן.
+עסק הצד שלו: כוח אדם לקבלנים (470 ₪ לפועל לחודש).
+הסיפורים שמגדירים אותו: קומה 40, אבי עזרא, איציק תשובה, וולט+תב"עות, קבלן עפר בלילה, כנס יזמים, רישיון תיווך ללא קורס, ריצת 10 ק"מ, ברזיל לבד.
+החולשות שלו: חוסר סבלנות, קפיצה בין רעיונות, השוואה לאחרים.
+ענה תמיד בעברית תקינה. היה ישיר, קצר וממוקד. אל תחזור על מה שאמרת. כשישראל בספק — החזר אותו לעובדות ולמעשים, לא לתחושות.`;
+
+const chatHistory = [];
+
+async function sendMessage() {
+  const input = document.getElementById('claude-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  appendMessage(text, 'user');
+  chatHistory.push({ role: 'user', content: text });
+  const loading = appendMessage('...', 'claude', true);
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'שגיאה בתגובה';
+    loading.remove();
+    appendMessage(reply, 'claude');
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    loading.remove();
+    appendMessage('שגיאת חיבור. נסה שוב.', 'claude');
+  }
+}
+
+async function quickAsk() {
+  const input = document.getElementById('quick-q');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const answerDiv = document.getElementById('quick-answer');
+  answerDiv.style.display = 'block';
+  answerDiv.textContent = '...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+    const data = await res.json();
+    answerDiv.textContent = data.content?.[0]?.text || 'שגיאה';
+  } catch (e) {
+    answerDiv.textContent = 'שגיאת חיבור';
+  }
+}
+
+async function askClaude(prompt) {
+  toggleClaude();
+  const input = document.getElementById('claude-input');
+  input.value = prompt;
+  await sendMessage();
+}
+
+function appendMessage(text, role, loading = false) {
+  const msgs = document.getElementById('claude-messages');
+  const div = document.createElement('div');
+  div.className = `msg msg-${role}${loading ? ' msg-loading' : ''}`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+// ── PEOPLE ──
+const people = JSON.parse(localStorage.getItem('israel-people') || '[]');
+if (!people.length) {
+  people.push(
+    { name: 'אבי עזרא', role: 'יזם נדל"ן', cat: 'VIP', where: 'יצרתי הזדמנות', next: 'לחזור עם הצעת ערך' },
+    { name: 'איציק תשובה', role: 'יזם ואיש עסקים', cat: 'VIP', where: 'יצרתי הזדמנות', next: 'לשמור קשר' },
+    { name: 'סמנכ"ל הר כביר', role: 'סמנכ"ל', cat: 'יזם', where: 'כנס יזמים', next: 'לחזור עם הצעת פועלים' }
+  );
+  localStorage.setItem('israel-people', JSON.stringify(people));
+}
+
+const catColors = { יזם: 'accent', קבלן: 'green', משקיע: 'purple', עירייה: 'amber', VIP: 'red', עסקים: 'green', אחר: 'grey' };
+
+function renderPeople(filter = 'all') {
+  const grid = document.getElementById('people-grid');
+  const filtered = filter === 'all' ? people : people.filter(p => p.cat === filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="card" style="cursor:pointer" onclick="askClaude('נתח לי את הקשר עם ${p.name}. מה הפוטנציאל? מה הצעד הבא?')">
+      <div class="flex items-center gap-8 mb-12">
+        <div class="avatar">${p.name.slice(0,2)}</div>
+        <div>
+          <div class="text-sm font-semibold">${p.name}</div>
+          <div class="text-xs text-dim mt-8">${p.role || ''}</div>
+        </div>
+        <span class="tag tag-${catColors[p.cat]||'grey'}" style="margin-right:auto">${p.cat}</span>
+      </div>
+      <div class="text-xs text-dim">איפה: ${p.where || '—'}</div>
+      <div class="text-xs text-dim mt-8">הבא: <span style="color:var(--text2)">${p.next || '—'}</span></div>
+    </div>
+  `).join('');
+}
+
+function filterPeople(cat, btn) {
+  document.querySelectorAll('#cat-filters .btn').forEach(b => b.style.borderColor = '');
+  btn.style.borderColor = 'var(--accent)';
+  renderPeople(cat);
+}
+
+function addPerson() {
+  const p = {
+    name: document.getElementById('p-name').value.trim(),
+    role: document.getElementById('p-role').value,
+    cat: document.getElementById('p-cat').value,
+    where: document.getElementById('p-where').value,
+    next: document.getElementById('p-next').value
+  };
+  if (!p.name) return;
+  people.unshift(p);
+  localStorage.setItem('israel-people', JSON.stringify(people));
+  closeModal('add-person-modal');
+  ['p-name','p-role','p-where','p-next'].forEach(id => document.getElementById(id).value = '');
+  renderPeople();
+}
+
+// ── IDEAS ──
+const ideas = JSON.parse(localStorage.getItem('israel-ideas') || '[]');
+if (!ideas.length) {
+  ideas.push(
+    { title: 'כוח אדם לקבלנים', cat: 'עסק', desc: '470 ₪ לפועל לחודש. כבר פועל.', status: 'פעיל' },
+    { title: 'סורסינג עסקאות נדל"ן', cat: 'נדל"ן', desc: 'מציאת עסקאות עבור יזמים. עלות אפס.', status: 'פעיל' },
+    { title: 'אוטומציית WhatsApp לקבלנים', cat: 'טכנולוגיה', desc: 'גיוס פועלים אוטומטי.', status: 'ממתין' },
+    { title: 'תוכנת AI לנדל"ן', cat: 'טכנולוגיה', desc: 'זיהוי הזדמנויות בינה מלאכותית.', status: 'ממתין' }
+  );
+  localStorage.setItem('israel-ideas', JSON.stringify(ideas));
+}
+
+const statusColor = { 'פעיל': 'green', 'ממתין': 'amber', 'נסגר': 'grey' };
+
+function renderIdeas() {
+  const grid = document.getElementById('ideas-grid');
+  grid.innerHTML = ideas.map(idea => `
+    <div class="idea-card" onclick="this.classList.toggle('open')">
+      <div class="flex items-center gap-8">
+        <div class="status-dot" style="background:var(--${statusColor[idea.status]||'text3'})"></div>
+        <div class="flex-1 text-sm font-semibold">${idea.title}</div>
+        <span class="tag tag-${statusColor[idea.status]||'grey'}">${idea.status}</span>
+        <span class="tag tag-grey">${idea.cat}</span>
+      </div>
+      <div class="idea-detail">
+        <div class="text-sm text-muted mt-8">${idea.desc}</div>
+        <button class="btn btn-secondary btn-sm mt-12" onclick="event.stopPropagation();askClaude('נתח לי את הרעיון: ${idea.title}. האם הוא עובר את חוק ישראל? מה הצעד הבא?')">נתח עם Claude</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addIdea() {
+  const idea = {
+    title: document.getElementById('idea-title').value.trim(),
+    desc: document.getElementById('idea-desc').value,
+    cat: document.getElementById('idea-cat').value,
+    status: 'ממתין'
+  };
+  if (!idea.title) return;
+  ideas.unshift(idea);
+  localStorage.setItem('israel-ideas', JSON.stringify(ideas));
+  closeModal('add-idea-modal');
+  ['idea-title','idea-desc'].forEach(id => document.getElementById(id).value = '');
+  renderIdeas();
+}
+
+// ── WORK ──
+const clients = [];
+function addClient() {
+  const cl = {
+    name: document.getElementById('cl-name').value.trim(),
+    status: document.getElementById('cl-status').value,
+    next: document.getElementById('cl-next').value
+  };
+  if (!cl.name) return;
+  clients.unshift(cl);
+  closeModal('add-client-modal');
+  ['cl-name','cl-next'].forEach(id => document.getElementById(id).value = '');
+  renderClients();
+}
+
+function renderClients() {
+  const list = document.getElementById('clients-list');
+  if (!clients.length) { list.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">אין לקוחות עדיין</div>'; return; }
+  list.innerHTML = clients.map(c => `
+    <div class="list-row">
+      <div class="status-dot" style="background:var(--${c.status==='נסגר'?'green':c.status==='בתהליך'?'accent':'amber'})"></div>
+      <div class="flex-col flex-1">
+        <div class="text-sm font-semibold">${c.name}</div>
+        <div class="text-xs text-dim mt-8">${c.next}</div>
+      </div>
+      <span class="tag tag-${c.status==='נסגר'?'green':c.status==='בתהליך'?'accent':'amber'}">${c.status}</span>
+    </div>
+  `).join('');
+}
+
+function updateWorkMetrics() {
+  const pipe = parseInt(document.getElementById('upd-pipe').value) || 0;
+  const closed = parseInt(document.getElementById('upd-closed').value) || 0;
+  const meetings = parseInt(document.getElementById('upd-meetings').value) || 0;
+  document.getElementById('pipe-count').textContent = pipe;
+  document.getElementById('closed-count').textContent = closed;
+  document.getElementById('meetings-count').textContent = meetings;
+  document.getElementById('w-sales').textContent = closed;
+  document.getElementById('conv-rate').textContent = pipe ? Math.round(closed/pipe*100)+'%' : '—';
+}
+
+// ── LESSONS ──
+function saveLesson() {
+  const v = document.getElementById('lesson-input').value.trim();
+  if (!v) return;
+  document.getElementById('lesson-input').value = '';
+  if (!STATE.lessons) STATE.lessons = [];
+  STATE.lessons.unshift(v);
+  save();
+  appendLesson(v);
+}
+
+function appendLesson(text) {
+  const list = document.getElementById('lessons-list');
+  const div = document.createElement('div');
+  div.className = 'list-row';
+  div.style.borderRight = '3px solid var(--amber)';
+  div.style.paddingRight = '10px';
+  div.innerHTML = `<div class="text-sm text-muted">${text}</div>`;
+  list.insertBefore(div, list.firstChild);
+}
+
+// ── JOURNAL ──
+function saveJournal() {
+  const title = document.getElementById('journal-title').value.trim();
+  const type = document.getElementById('journal-type').value;
+  const body = document.getElementById('journal-body').value;
+  if (!title) return;
+  const entry = { title, type, body, date: new Date().toLocaleDateString('he-IL') };
+  if (!STATE.journalEntries) STATE.journalEntries = [];
+  STATE.journalEntries.unshift(entry);
+  save();
+  ['journal-title','journal-body'].forEach(id => document.getElementById(id).value = '');
+  appendJournalEntry(entry);
+}
+
+function appendJournalEntry(e) {
+  const list = document.getElementById('journal-list');
+  const div = document.createElement('div');
+  div.className = 'list-row';
+  div.innerHTML = `<div class="flex-col flex-1"><div class="text-sm font-semibold">${e.title}</div><div class="text-xs text-dim mt-8">${e.type} • ${e.date}</div>${e.body?`<div class="text-xs text-muted mt-8">${e.body}</div>`:''}</div>`;
+  list.insertBefore(div, list.firstChild);
+}
+
+// ── WINS ──
+function addWin() {
+  const title = document.getElementById('win-title').value.trim();
+  const cat = document.getElementById('win-cat').value;
+  if (!title) return;
+  const w = { title, cat };
+  if (!STATE.extraWins) STATE.extraWins = [];
+  STATE.extraWins.unshift(w);
+  save();
+  closeModal('add-win-modal');
+  document.getElementById('win-title').value = '';
+  appendWin(w);
+}
+
+function appendWin(w) {
+  const grid = document.getElementById('extra-wins');
+  const div = document.createElement('div');
+  div.className = 'card mb-8';
+  div.style.cssText = 'border-right:3px solid var(--green);border-radius:0 12px 12px 0';
+  div.innerHTML = `<div class="text-xs text-dim mb-8">${w.cat}</div><div class="text-sm font-semibold">${w.title}</div>`;
+  grid.insertBefore(div, grid.firstChild);
+}
+
+// ── TIMELINE ──
+function addTimelineEvent() {
+  const text = document.getElementById('event-text').value.trim();
+  if (!text) return;
+  document.getElementById('event-text').value = '';
+  closeModal('add-event-modal');
+  const extra = document.getElementById('extra-events');
+  const div = document.createElement('div');
+  div.className = 'card mt-8';
+  div.style.borderColor = 'var(--accent)';
+  div.innerHTML = `<div class="list-row" style="border:none"><div class="status-dot" style="background:var(--accent)"></div><div class="text-sm">${text}</div></div>`;
+  extra.insertBefore(div, extra.firstChild);
+}
+
+// ── TASKS ──
+function addTask() {
+  const title = document.getElementById('task-title').value.trim();
+  const prio = document.getElementById('task-prio').value;
+  if (!title) return;
+  closeModal('add-task-modal');
+  document.getElementById('task-title').value = '';
+  const list = document.getElementById('open-tasks');
+  const div = document.createElement('div');
+  div.className = 'list-row';
+  div.innerHTML = `<div class="status-dot" style="background:var(--${prio==='דחוף'?'amber':prio==='שוטף'?'accent':'text3'})"></div><div class="flex-1">${title}</div><span class="tag tag-${prio==='דחוף'?'amber':prio==='שוטף'?'accent':'grey'}">${prio}</span>`;
+  list.appendChild(div);
+}
+
+// ── DEALS ──
+function addDeal() {
+  const title = document.getElementById('deal-title').value.trim();
+  const cat = document.getElementById('deal-cat').value;
+  const col = document.getElementById('deal-stage').value;
+  if (!title) return;
+  closeModal('add-deal-modal');
+  ['deal-title','deal-cat'].forEach(id => document.getElementById(id).value = '');
+  const colEl = document.getElementById(col);
+  const div = document.createElement('div');
+  div.className = 'kanban-item';
+  div.innerHTML = `<div class="kanban-item-title">${title}</div><div class="kanban-item-sub">${cat}</div>`;
+  colEl.appendChild(div);
+}
+
+// ── DASHBOARD ──
+let contractors = STATE.contractors || 0;
+
+function adjContractors(d) {
+  contractors = Math.max(0, contractors + d);
+  STATE.contractors = contractors;
+  save();
+  updateContractors();
+}
+
+function updateContractors() {
+  document.getElementById('contractors-num').textContent = contractors;
+  document.getElementById('contractors-rev').textContent = '₪' + (contractors * 470).toLocaleString() + ' / חודש';
+  const pct = Math.min(100, Math.round(contractors / 10 * 100));
+  document.getElementById('contractors-pct').textContent = pct + '%';
+  document.getElementById('contractors-bar').style.width = pct + '%';
+  document.getElementById('w-contractors').textContent = contractors;
+}
+
+function editMetric(id, label) {
+  const v = prompt(label + ':');
+  if (v !== null && v.trim()) document.getElementById(id).textContent = v;
+}
+
+function setMood(m, btn) {
+  ['mood-low','mood-mid','mood-high'].forEach(id => {
+    document.getElementById(id).style.borderColor = '';
+    document.getElementById(id).style.color = '';
+  });
+  btn.style.borderColor = 'var(--accent)';
+  btn.style.color = 'var(--accent)';
+  const msgs = {
+    low: 'גם בימים נמוכים אתה עדיין ישראל שעלה לקומה 40. פתח את דף החירום.',
+    mid: 'סביר זה בסדר. עשה פעולה אחת קדימה היום — רק אחת.',
+    high: 'זו האנרגיה שסוגרת עסקאות. תנצל אותה — צור קשר, שלח הצעה.'
+  };
+  document.getElementById('mood-msg').textContent = msgs[m];
+}
+
+function saveMorning() {
+  const re = document.getElementById('morning-re').value.trim();
+  const work = document.getElementById('morning-work').value.trim();
+  if (!re && !work) return;
+  alert('✅ היום הוגדר. קדימה ישראל.');
+}
+
+// ── MODALS ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function saveProg(v) {
+  document.getElementById('save-bar').style.width = v + '%';
+  document.getElementById('save-pct').textContent = Math.round(v) + '%';
+}
+</script>
+
+<!-- API SETUP -->
+<div id="api-setup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px">
+  <div style="background:#1a1a24;border:1px solid #2a2a3a;border-radius:14px;padding:28px;width:100%;max-width:420px">
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px;color:#f0f0f5">חיבור ל-Claude</div>
+    <div style="font-size:13px;color:#9090a8;margin-bottom:20px;line-height:1.6">הכנס את מפתח ה-API שלך. הוא נשמר בטלפון שלך בלבד ולא עולה לשום שרת.</div>
+    <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:#111118;border:1px solid #2a2a3a;border-radius:8px;color:#f0f0f5;font-size:13px;padding:10px 14px;margin-bottom:12px;direction:ltr;text-align:left;font-family:monospace">
+    <button onclick="saveApiKey()" style="width:100%;padding:12px;background:#4f8ef7;border:none;border-radius:8px;color:white;font-size:15px;font-weight:600;cursor:pointer">התחבר</button>
+  </div>
+</div>
+
+
+
+</body></html>
